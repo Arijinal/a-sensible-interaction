@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Sensible Interaction | Cyber Safety for Girls 8-17</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6fbff;
+      --surface: #ffffff;
+      --surface-soft: #edf7ff;
+      --ink: #0d2238;
+      --ink-soft: #49607a;
+      --brand: #0078b8;
+      --brand-deep: #00588a;
+      --mint: #2bb8a6;
+      --sun: #f2b63d;
+      --rose: #ef6d87;
+      --line: #d6e8f5;
+      --radius: 20px;
+      --shadow: 0 20px 50px rgba(7, 28, 50, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 15%, rgba(43, 184, 166, 0.12), transparent 28%),
+        radial-gradient(circle at 84% 20%, rgba(0, 120, 184, 0.14), transparent 32%),
+        radial-gradient(circle at 50% 92%, rgba(242, 182, 61, 0.16), transparent 36%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image: radial-gradient(rgba(8, 42, 68, 0.09) 0.7px, transparent 0.7px);
+      background-size: 4px 4px;
+      mix-blend-mode: multiply;
+    }
+
+    .page {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+      padding: 42px 0 60px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+
+    .hero-main {
+      background: linear-gradient(145deg, #ffffff 0%, #f3faff 45%, #ecf6ff 100%);
+      border: 1px solid #d4e8f8;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      right: -48px;
+      top: -48px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(43, 184, 166, 0.5) 0%, rgba(43, 184, 166, 0) 72%);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: rgba(0, 120, 184, 0.12);
+      color: var(--brand-deep);
+      padding: 7px 14px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-size: 0.83rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 16px 0 8px;
+      font-family: "Fraunces", serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.06;
+      letter-spacing: 0.01em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      max-width: 60ch;
+    }
+
+    .jobs-note {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid #c9e3f8;
+      background: rgba(255, 255, 255, 0.92);
+      display: grid;
+      gap: 4px;
+    }
+
+    .jobs-note strong {
+      font-size: 0.93rem;
+      color: #05385e;
+    }
+
+    .jobs-note p {
+      margin: 0;
+      color: #36506a;
+      font-size: 0.94rem;
+      line-height: 1.45;
+    }
+
+    .hero-side {
+      background: linear-gradient(165deg, #00466f 0%, #006ea7 52%, #0a8eb7 100%);
+      border-radius: 30px;
+      color: #eaf7ff;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-side::before {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      left: -130px;
+      bottom: -130px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-side h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-ring {
+      --progress: 0%;
+      width: 108px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(from -90deg, #f4c14e var(--progress), rgba(255, 255, 255, 0.22) var(--progress));
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: background 0.45s ease;
+    }
+
+    .progress-inner {
+      width: 78px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #065f94;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .progress-inner span {
+      display: block;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+
+    .progress-inner small {
+      font-size: 0.7rem;
+      opacity: 0.88;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .progress-copy strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .progress-copy p {
+      margin: 0;
+      color: rgba(234, 247, 255, 0.89);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat {
+      border-radius: 18px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      padding: 16px;
+      box-shadow: 0 8px 22px rgba(9, 35, 58, 0.06);
+      transform: translateY(0);
+      animation: riseIn 0.65s ease backwards;
+    }
+
+    .stat:nth-child(2) { animation-delay: 0.06s; }
+    .stat:nth-child(3) { animation-delay: 0.12s; }
+    .stat:nth-child(4) { animation-delay: 0.18s; }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat .number {
+      font-size: 1.56rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: #06385d;
+    }
+
+    .stat p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.91rem;
+      line-height: 1.35;
+    }
+
+    .middle {
+      display: grid;
+      grid-template-columns: 0.78fr 1.22fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .panel h3 {
+      margin: 0 0 8px;
+      font-family: "Fraunces", serif;
+      font-size: 1.6rem;
+      color: #073f66;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.48;
+      font-size: 0.93rem;
+    }
+
+    .risk-list {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .risk-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .risk-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: #1f3f5e;
+      font-weight: 700;
+    }
+
+    .bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #e8f2fb;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar > span {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--w);
+      background: linear-gradient(90deg, #0090d5, #18b2b1);
+      border-radius: inherit;
+      transition: width 0.45s ease;
+    }
+
+    .formula {
+      margin-top: 16px;
+      border-radius: 16px;
+      padding: 14px;
+      background: #eef8ff;
+      border: 1px dashed #b6d8ee;
+      color: #1d4a6b;
+      font-size: 0.91rem;
+      line-height: 1.5;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 6px 0 14px;
+    }
+
+    .chip {
+      border: 1px solid #cae2f4;
+      background: #f4fafe;
+      color: #18496a;
+      border-radius: 999px;
+      padding: 8px 13px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .chip[aria-pressed="true"],
+    .chip:hover {
+      background: #0079b8;
+      color: #ffffff;
+      border-color: #00649a;
+      transform: translateY(-1px);
+    }
+
+    .tips {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .tip {
+      border: 1px solid #d4e7f6;
+      background: linear-gradient(180deg, #ffffff, #f8fcff);
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+      display: grid;
+      gap: 8px;
+      animation: fadeUp 0.4s ease backwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tip-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .tip-title {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.33;
+      color: #063355;
+    }
+
+    .badge {
+      flex-shrink: 0;
+      border-radius: 999px;
+      background: #e9f6ff;
+      border: 1px solid #c7e2f5;
+      color: #0a567f;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 5px 9px;
+    }
+
+    .badge-wrap {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .badge-level {
+      background: #f0fdf4;
+      border-color: #bee8cf;
+      color: #1b6a4f;
+    }
+
+    .badge-level.advanced {
+      background: #fff7e8;
+      border-color: #f6dbad;
+      color: #8a5c00;
+    }
+
+    .tip p {
+      margin: 0;
+      color: #3a5772;
+      line-height: 1.45;
+      font-size: 0.9rem;
+    }
+
+    .tip .why {
+      color: #24435f;
+    }
+
+    .tip-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .try {
+      font-size: 0.82rem;
+      color: #305673;
+      font-weight: 600;
+    }
+
+    .toggle-practice {
+      border: 1px solid #b9d9ee;
+      background: #ffffff;
+      color: #0f4f75;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-practice.active {
+      background: #1fae91;
+      border-color: #0e9478;
+      color: white;
+    }
+
+    .checklist {
+      margin-top: 18px;
+      border-top: 1px solid #d5e7f6;
+      padding-top: 15px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .checklist h4 {
+      margin: 0;
+      font-size: 1rem;
+      color: #0d4067;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .step {
+      border-radius: 13px;
+      border: 1px solid #cae2f4;
+      background: #f6fbff;
+      padding: 11px 10px;
+      text-align: center;
+      font-size: 0.78rem;
+      line-height: 1.35;
+      color: #214863;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      border-radius: 14px;
+      background: #fff8e9;
+      border: 1px solid #f5dfad;
+      padding: 12px;
+      color: #6b4f1c;
+      font-size: 0.87rem;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .middle {
+        grid-template-columns: 1fr;
+      }
+
+      .tips {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .steps {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        width: 94vw;
+        padding-top: 24px;
+      }
+
+      .hero-main,
+      .hero-side,
+      .panel {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .progress-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <main class="page">
+    <section class="hero">
+      <article class="hero-main">
+        <span class="tag">A Sensible Interaction</span>
+        <h1>20 Cybersecurity Habits Every Girl (8-17) Should Know</h1>
+        <p class="subtitle">
+          Build confidence online with clear, practical actions for school, home, and social apps.
+          These are the high-impact habits that prevent most digital mistakes before they happen.
+        </p>
+        <div class="jobs-note">
+          <strong>Jobs Lens: One Promise</strong>
+          <p>
+            Help girls make one smart security decision in under five seconds, so they feel confident,
+            protected, and in control online.
+          </p>
+        </div>
+      </article>
+
+      <aside class="hero-side" aria-label="Progress tracker">
+        <h2>Safety Progress</h2>
+        <div class="progress-wrap">
+          <div class="progress-ring" id="progressRing">
+            <div class="progress-inner">
+              <span id="progressValue">0%</span>
+              <small>Ready</small>
+            </div>
+          </div>
+          <div class="progress-copy">
+            <strong><span id="masteredCount">0</span> / 20 practiced</strong>
+            <p>Tap "Practiced" on each card as you build your personal cyber safety routine.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="stats" aria-label="Program stats">
+      <article class="stat">
+        <div class="number">20</div>
+        <p>Must-know habits with action steps</p>
+      </article>
+      <article class="stat">
+        <div class="number">6</div>
+        <p>Security zones: device, privacy, social, scam, network, school</p>
+      </article>
+      <article class="stat">
+        <div class="number">5s</div>
+        <p>Pause rule before posting, tapping, or sharing anything</p>
+      </article>
+      <article class="stat">
+        <div class="number">1</div>
+        <p>Trusted adult backup when something feels off</p>
+      </article>
+    </section>
+
+    <section class="middle">
+      <article class="panel" aria-label="Risk snapshot">
+        <h3>Risk Snapshot</h3>
+        <p>
+          These categories tend to cause the most online trouble for middle school users.
+          Prioritize habits where risk is highest.
+        </p>
+
+        <div class="risk-list">
+          <div class="risk-row">
+            <div class="risk-head"><span>Social oversharing</span><span>86%</span></div>
+            <div class="bar" aria-hidden="true"><span style="--w:86%"></span></div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-head"><span>Scam & phishing clicks</span><span>78%</span></div>
+            <div class="bar" aria-hidden="true"><span style="--w:78%"></span></div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-head"><span>Weak passwords</span><span>72%</span></div>
+            <div class="bar" aria-hidden="true"><span style="--w:72%"></span></div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-head"><span>Unsecured devices</span><span>69%</span></div>
+            <div class="bar" aria-hidden="true"><span style="--w:69%"></span></div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-head"><span>Public Wi-Fi misuse</span><span>63%</span></div>
+            <div class="bar" aria-hidden="true"><span style="--w:63%"></span></div>
+          </div>
+        </div>
+
+        <div class="formula">
+          <strong>Simple formula:</strong> Pause -> Check -> Protect -> Ask.
+          If a message, post, or link makes you rush, slow down and verify first.
+        </div>
+      </article>
+
+      <article class="panel" aria-label="Top security tips">
+        <h3>Top 20 Tips & Tricks</h3>
+        <p>Filter by level or category, then mark each one as practiced.</p>
+        <div class="filters" id="filters"></div>
+        <div class="tips" id="tipsContainer"></div>
+
+        <div class="checklist">
+          <h4>The 5-Second Sensible Check</h4>
+          <div class="steps" aria-label="Five second checklist">
+            <div class="step">1. Stop<br />before tapping</div>
+            <div class="step">2. Think<br />who can see this</div>
+            <div class="step">3. Check<br />if this is real</div>
+            <div class="step">4. Protect<br />password + privacy</div>
+            <div class="step">5. Ask<br />if unsure</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="footer-note">
+      If anything online feels scary, manipulative, or secretive, tell a trusted adult right away.
+      Smart cybersecurity is about confidence, not fear.
+    </section>
+  </main>
+
+  <script>
+    const tips = [
+      {
+        id: 1,
+        level: "basic",
+        category: "device",
+        title: "Lock your device every time you walk away",
+        why: "An unlocked laptop or phone lets anyone read messages, change accounts, or post as you.",
+        tryNow: "Use auto-lock at 1-2 minutes and a PIN, pattern, or passcode."
+      },
+      {
+        id: 2,
+        level: "basic",
+        category: "passwords",
+        title: "Use passphrases, not easy passwords",
+        why: "\"Password123\" and birthdays are fast to guess. Strong passphrases are harder to crack.",
+        tryNow: "Build 4 random words plus symbols, like Moon!River7PaperCloud."
+      },
+      {
+        id: 3,
+        level: "advanced",
+        category: "passwords",
+        title: "Turn on two-factor authentication (2FA)",
+        why: "Even if someone steals your password, they still cannot enter without your second check.",
+        tryNow: "Enable 2FA on email, social apps, and gaming accounts first."
+      },
+      {
+        id: 4,
+        level: "basic",
+        category: "device",
+        title: "Update apps and devices quickly",
+        why: "Updates patch security holes that hackers actively exploit.",
+        tryNow: "Set phone, tablet, and laptop updates to automatic."
+      },
+      {
+        id: 5,
+        level: "basic",
+        category: "social",
+        title: "Keep accounts private by default",
+        why: "Private settings reduce random strangers viewing your photos and personal details.",
+        tryNow: "Review privacy settings monthly on each app you use."
+      },
+      {
+        id: 6,
+        level: "basic",
+        category: "social",
+        title: "Never post your location while you are there",
+        why: "Live location posts can tell people where you are and when your home is empty.",
+        tryNow: "Post vacation or event photos after you return home."
+      },
+      {
+        id: 7,
+        level: "basic",
+        category: "social",
+        title: "Share less personal info (PII)",
+        why: "Full name, school, phone number, and birthday can be used for scams and impersonation.",
+        tryNow: "Remove school logos, IDs, and addresses from photos before posting."
+      },
+      {
+        id: 8,
+        level: "basic",
+        category: "social",
+        title: "Accept follow requests only from people you actually know",
+        why: "Fake accounts often pretend to be your age to collect personal details.",
+        tryNow: "If you cannot verify them offline, do not accept."
+      },
+      {
+        id: 9,
+        level: "basic",
+        category: "scam",
+        title: "Treat urgent DMs and links like red flags",
+        why: "Scammers create panic so you click fast without checking.",
+        tryNow: "Use the pause rule: if it says \"urgent\", verify through another channel."
+      },
+      {
+        id: 10,
+        level: "advanced",
+        category: "scam",
+        title: "Do not share verification codes with anyone",
+        why: "Real companies do not ask for your one-time login codes in chat.",
+        tryNow: "If someone asks for a code, stop and report immediately."
+      },
+      {
+        id: 11,
+        level: "advanced",
+        category: "scam",
+        title: "Watch for fake giveaways and prizes",
+        why: "\"You won!\" scams steal account details, payment info, or login credentials.",
+        tryNow: "Only trust giveaways posted on verified official pages."
+      },
+      {
+        id: 12,
+        level: "advanced",
+        category: "network",
+        title: "Use strong Wi-Fi passwords at home",
+        why: "Weak Wi-Fi passwords let outsiders use your network or snoop traffic.",
+        tryNow: "Use a long passphrase; avoid names, pets, birthdays, or house number."
+      },
+      {
+        id: 13,
+        level: "advanced",
+        category: "network",
+        title: "Turn off auto-join for unknown Wi-Fi",
+        why: "Devices can connect to unsafe hotspots that pretend to be legit networks.",
+        tryNow: "Forget unknown networks and join manually when needed."
+      },
+      {
+        id: 14,
+        level: "basic",
+        category: "device",
+        title: "Install apps only from trusted stores",
+        why: "Unofficial downloads often contain malware or spyware.",
+        tryNow: "Use App Store, Google Play, or school-approved software sources."
+      },
+      {
+        id: 15,
+        level: "advanced",
+        category: "privacy",
+        title: "Check app permissions before tapping Allow",
+        why: "Some apps ask for camera, contacts, or mic access they do not need.",
+        tryNow: "Deny extras. Give only the minimum permissions required."
+      },
+      {
+        id: 16,
+        level: "basic",
+        category: "school",
+        title: "Log out of shared school computers",
+        why: "Staying logged in lets the next person read email, files, or change passwords.",
+        tryNow: "Sign out fully and close the browser before leaving the desk."
+      },
+      {
+        id: 17,
+        level: "advanced",
+        category: "privacy",
+        title: "Use a screen lock and hide previews on lock screen",
+        why: "Message previews can leak private conversations to anyone nearby.",
+        tryNow: "Set notifications to hide content when device is locked."
+      },
+      {
+        id: 18,
+        level: "basic",
+        category: "school",
+        title: "Report cyberbullying and harassment quickly",
+        why: "Silence gives harmful behavior more time to spread.",
+        tryNow: "Screenshot evidence, block the account, and tell a trusted adult."
+      },
+      {
+        id: 19,
+        level: "advanced",
+        category: "privacy",
+        title: "Back up important files and photos",
+        why: "If a device is lost, broken, or hacked, backup keeps your work safe.",
+        tryNow: "Use cloud backup weekly for school files and special photos."
+      },
+      {
+        id: 20,
+        level: "basic",
+        category: "scam",
+        title: "If something feels weird, trust your instincts",
+        why: "Many threats are social tricks, and your first warning is often your gut feeling.",
+        tryNow: "Pause and ask a trusted adult before replying, clicking, or paying."
+      }
+    ];
+
+    const filters = [
+      { key: "all", label: "All" },
+      { key: "basic", label: "Basic" },
+      { key: "advanced", label: "Advanced" },
+      { key: "device", label: "Device" },
+      { key: "passwords", label: "Passwords" },
+      { key: "social", label: "Social" },
+      { key: "scam", label: "Scams" },
+      { key: "network", label: "Network" },
+      { key: "privacy", label: "Privacy" },
+      { key: "school", label: "School" }
+    ];
+
+    const categoryLabels = {
+      device: "Device",
+      passwords: "Passwords",
+      social: "Social",
+      scam: "Scams",
+      network: "Network",
+      privacy: "Privacy",
+      school: "School"
+    };
+
+    const storageKey = "sensibleInteractionPracticed";
+    const stored = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    const practiced = new Set(stored);
+    let activeFilter = "all";
+
+    const filtersEl = document.getElementById("filters");
+    const tipsContainer = document.getElementById("tipsContainer");
+
+    function savePractice() {
+      localStorage.setItem(storageKey, JSON.stringify([...practiced]));
+    }
+
+    function updateProgress() {
+      const count = practiced.size;
+      const percent = Math.round((count / tips.length) * 100);
+
+      document.getElementById("masteredCount").textContent = String(count);
+      document.getElementById("progressValue").textContent = `${percent}%`;
+      document.getElementById("progressRing").style.setProperty("--progress", `${percent}%`);
+    }
+
+    function renderFilters() {
+      filtersEl.innerHTML = filters
+        .map(
+          (f) => `<button class="chip" data-filter="${f.key}" aria-pressed="${f.key === activeFilter}">${f.label}</button>`
+        )
+        .join("");
+
+      filtersEl.querySelectorAll(".chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          activeFilter = chip.dataset.filter;
+          renderFilters();
+          renderTips();
+        });
+      });
+    }
+
+    function renderTips() {
+      const visibleTips = tips.filter((tip) => {
+        if (activeFilter === "all") {
+          return true;
+        }
+
+        if (activeFilter === "basic" || activeFilter === "advanced") {
+          return tip.level === activeFilter;
+        }
+
+        return tip.category === activeFilter;
+      });
+
+      tipsContainer.innerHTML = visibleTips
+        .map((tip, idx) => {
+          const isDone = practiced.has(tip.id);
+          return `
+            <article class="tip" style="animation-delay:${Math.min(idx * 0.035, 0.28)}s">
+              <div class="tip-head">
+                <h4 class="tip-title">${tip.id}. ${tip.title}</h4>
+                <span class="badge-wrap">
+                  <span class="badge badge-level ${tip.level === "advanced" ? "advanced" : ""}">${tip.level}</span>
+                  <span class="badge">${categoryLabels[tip.category]}</span>
+                </span>
+              </div>
+              <p class="why"><strong>Why it matters:</strong> ${tip.why}</p>
+              <div class="tip-footer">
+                <span class="try"><strong>Try now:</strong> ${tip.tryNow}</span>
+                <button class="toggle-practice ${isDone ? "active" : ""}" data-tip-id="${tip.id}">
+                  ${isDone ? "Practiced" : "Mark Practiced"}
+                </button>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      tipsContainer.querySelectorAll(".toggle-practice").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.tipId);
+
+          if (practiced.has(id)) {
+            practiced.delete(id);
+          } else {
+            practiced.add(id);
+          }
+
+          savePractice();
+          updateProgress();
+          renderTips();
+        });
+      });
+    }
+
+    renderFilters();
+    renderTips();
+    updateProgress();
+  </script>
+</body>
+</html>
