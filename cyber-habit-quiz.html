@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Habit Quiz | A Sensible Interaction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6fbff;
+      --surface: #ffffff;
+      --text: #102741;
+      --text-soft: #435b73;
+      --ink: #0d2238;
+      --brand: #0078b8;
+      --brand-2: #1daaa0;
+      --brand-3: #005c99;
+      --danger: #e25458;
+      --success: #0a8b65;
+      --line: #d6e8f5;
+      --shadow: 0 16px 44px rgba(9, 31, 52, 0.12);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 12%, rgba(43, 184, 166, 0.13), transparent 35%),
+        radial-gradient(circle at 86% 18%, rgba(0, 120, 184, 0.15), transparent 33%),
+        radial-gradient(circle at 50% 90%, rgba(242, 182, 61, 0.14), transparent 34%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image: radial-gradient(rgba(9, 38, 65, 0.09) 1px, transparent 1px);
+      background-size: 4px 4px;
+      mix-blend-mode: multiply;
+    }
+
+    .wrap {
+      width: min(960px, 92vw);
+      margin: 0 auto;
+      padding: 36px 0 52px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #ffffff, #ecf9ff);
+      border-radius: 26px;
+      border: 1px solid #d5e8f7;
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 4vw, 34px);
+      margin-bottom: 22px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      right: -90px;
+      top: -95px;
+      background: radial-gradient(circle, rgba(43, 184, 166, 0.5), transparent 72%);
+      opacity: 0.5;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      margin: 14px 0 0;
+      color: var(--text-soft);
+      max-width: 60ch;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: rgba(0, 120, 184, 0.12);
+      color: var(--brand-3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: 0.8rem;
+    }
+
+    .age-pill {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 12px;
+      padding: 7px 12px;
+      background: #e4f6ff;
+      border: 1px solid #c6e2f6;
+      color: #0f4d75;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .stats {
+      align-self: center;
+      display: grid;
+      gap: 12px;
+    }
+
+    .stat {
+      border-radius: 18px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 26px rgba(8, 38, 64, 0.08);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: "Fraunces", serif;
+      font-size: 1.55rem;
+      color: var(--brand-3);
+      margin-bottom: 2px;
+    }
+
+    .stat span {
+      color: var(--text-soft);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .panel {
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      padding: 22px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      animation: rise 0.45s ease-out both;
+    }
+
+    .progress {
+      margin-bottom: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      color: #0b365a;
+      font-size: 0.95rem;
+    }
+
+    .bar {
+      position: relative;
+      height: 10px;
+      border-radius: 99px;
+      background: #deedf8;
+      overflow: hidden;
+    }
+
+    .bar > span {
+      position: absolute;
+      inset: 0;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      transition: width 0.35s ease;
+    }
+
+    .question {
+      border-left: 4px solid var(--brand-2);
+      background: #f5fbff;
+      border-radius: 16px;
+      padding: 16px;
+      color: #193757;
+      font-size: 1.06rem;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .option {
+      border: 1px solid #c8dff0;
+      border-radius: 14px;
+      background: #fff;
+      color: #18314a;
+      text-align: left;
+      padding: 12px 14px;
+      cursor: pointer;
+      font: inherit;
+      transition: 0.2s ease;
+    }
+
+    .option:hover {
+      transform: translateY(-1px);
+      border-color: #8ed1e8;
+      background: #f4fbff;
+    }
+
+    .option:disabled {
+      cursor: default;
+      opacity: 0.85;
+      transform: none;
+    }
+
+    .option.correct {
+      border-color: #8ce8cb;
+      background: #ecfff7;
+      color: #0b5a3f;
+    }
+
+    .option.wrong {
+      border-color: #f6c0bf;
+      background: #fff6f6;
+      color: #7d2b31;
+    }
+
+    .feedback {
+      min-height: 66px;
+      border-radius: 13px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      border: 1px dashed #bdd9eb;
+      background: #f7fbff;
+      color: #294a66;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .next-btn,
+    .restart-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .next-btn {
+      background: linear-gradient(145deg, var(--brand), #0d79ca);
+      color: white;
+    }
+
+    .next-btn[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .next-btn:hover:not(:disabled),
+    .restart-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .next-btn-wrap {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .results {
+      display: none;
+      margin-top: 14px;
+      border-radius: 18px;
+      background: linear-gradient(160deg, #eaf8f5, #edf8ff);
+      border: 1px solid #bde0ed;
+      padding: 16px;
+      animation: rise 0.35s ease;
+    }
+
+    .results.show {
+      display: block;
+    }
+
+    .score-line {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f4d76;
+      margin-bottom: 8px;
+    }
+
+    .best {
+      color: #1c5e7b;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .summary {
+      border-top: 1px solid #bedbf0;
+      margin-top: 14px;
+      padding-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .review-item {
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px 12px;
+      border: 1px solid #d7e6f4;
+      color: #28465f;
+      line-height: 1.45;
+    }
+
+    .review-item h4 {
+      margin: 0;
+      font-size: 0.96rem;
+      margin-bottom: 6px;
+      color: #113a59;
+    }
+
+    .review-item p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: #325d76;
+    }
+
+    .ok {
+      color: #0a8b65;
+      font-weight: 700;
+    }
+
+    .nope {
+      color: #bb4b52;
+      font-weight: 700;
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .restart-btn {
+      background: #0f5f8f;
+      color: white;
+    }
+
+    .home-btn {
+      border-radius: 12px;
+      border: 1px solid var(--brand);
+      color: var(--brand-3);
+      background: #e9f4fc;
+      padding: 11px 14px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+        display: grid;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .question,
+      .feedback,
+      .review-item {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <span class="tag">A Sensible Interaction</span>
+        <h1>20-Question Cyber Habit Quiz</h1>
+        <p class="subtitle">
+          Test real-life cybersecurity choices based on the 20 habits every girl (ages 8-17) should know.
+          Every question is practical, with feedback and a quick review at the end.
+        </p>
+        <p class="age-pill">Target age range: 8-17</p>
+      </div>
+      <div class="stats" aria-label="Quiz overview">
+        <div class="stat">
+          <strong>20</strong>
+          <span>Scenario questions built from the habit list</span>
+        </div>
+        <div class="stat">
+          <strong>4</strong>
+          <span>answer choices each</span>
+        </div>
+        <div class="stat">
+          <strong>1</strong>
+          <span>correct answer per question</span>
+        </div>
+        <div class="stat">
+          <strong>All in one place</strong>
+          <span>shareable from your browser</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-live="polite">
+      <div class="progress">
+        <div class="progress-head">
+          <span>Question <span id="current">1</span> / 20</span>
+          <span>Score: <span id="score">0</span></span>
+        </div>
+        <div class="bar" aria-hidden="true"><span id="progressFill"></span></div>
+      </div>
+
+      <div class="question" id="questionText"></div>
+
+      <div class="options" id="options"></div>
+
+      <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+
+      <div class="next-btn-wrap">
+        <button class="next-btn" id="nextBtn" disabled>Next Question</button>
+      </div>
+
+      <div class="results" id="results"></div>
+
+      <div class="actions">
+        <a href="index.html" class="home-btn">Back to Habit Guide</a>
+        <button class="restart-btn" id="restartBtn" type="button">Retake Quiz</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const quizQuestions = [
+      {
+        id: 1,
+        question: "You leave your phone on the bus stop for 2 minutes while you run inside. What should you do right before stepping away?",
+        options: [
+          "Keep the screen open so you can grab it quickly",
+          "Turn on auto-lock and lock the screen now",
+          "Lower brightness only",
+          "Switch to dark mode"
+        ],
+        answer: 1,
+        explanation: "An unlocked device lets someone read your messages or post as you. Lock it every time you walk away and keep auto-lock short."
+      },
+      {
+        id: 2,
+        question: "Which password is strongest?",
+        options: [
+          "Password123",
+          "Sunny2026",
+          "12345678",
+          "Moon!River7PaperCloud"
+        ],
+        answer: 3,
+        explanation: "Passphrases with multiple random words and symbols are much harder to guess than names, birthdays, or short words."
+      },
+      {
+        id: 3,
+        question: "A message says, 'Your account is at risk, send your code to confirm.' What is best?",
+        options: [
+          "Share code only if it is from your school",
+          "Share the code after deleting chat",
+          "Ignore it and change your profile picture",
+          "Never share verification codes; report the message"
+        ],
+        answer: 3,
+        explanation: "Real companies never ask for one-time verification codes in chat. Keep 2FA codes private."
+      },
+      {
+        id: 4,
+        question: "Why is enabling app and device updates important?",
+        options: [
+          "Updates make your phone more stylish",
+          "It increases storage by shrinking files",
+          "It improves battery life only",
+          "It patches security holes and fixes bugs"
+        ],
+        answer: 3,
+        explanation: "Security updates close known gaps that attackers can exploit. Set them to automatic when possible."
+      },
+      {
+        id: 5,
+        question: "Someone you do not know has sent you a friend request. What should you do?",
+        options: [
+          "Accept because they asked everyone you know",
+          "Accept and send private chat quickly",
+          "Decline, ignore, then verify with trusted adults",
+          "Share your bio and follow back"
+        ],
+        answer: 2,
+        explanation: "Accepting only people you actually know helps reduce fake accounts and profile-stalking risks."
+      },
+      {
+        id: 6,
+        question: "You are on holiday and want to post your sunset photo. Which is safest?",
+        options: [
+          "Post with live location so friends can find you",
+          "Post a geotagged group photo after leaving the place",
+          "Post without location tags and only after you return",
+          "Post exact house address so people can visit"
+        ],
+        answer: 2,
+        explanation: "Posting location while you are away can expose your movements. Delay or remove geotags before posting."
+      },
+      {
+        id: 7,
+        question: "Which profile photo detail should you avoid sharing?",
+        options: [
+          "A close-up of your favorite shoes",
+          "An image showing school uniform and name tag",
+          "A drawing you made yourself",
+          "A flower from your backyard"
+        ],
+        answer: 1,
+        explanation: "School logos, addresses, phone numbers, full names, and IDs count as PII and raise identity risks."
+      },
+      {
+        id: 8,
+        question: "A classmate receives your follow request and you are not sure who they are. What should you do?",
+        options: [
+          "Accept first, then decide later",
+          "Only accept if you can verify the person in another way",
+          "Ignore privacy settings and keep open profile",
+          "Send your email and phone for trust"
+        ],
+        answer: 1,
+        explanation: "If you cannot verify someone offline, do not accept. Fake accounts often pretend to be peers."
+      },
+      {
+        id: 9,
+        question: "An app says your account will close in 10 minutes unless you click a link right now. What is best first action?",
+        options: [
+          "Click immediately and provide login details",
+          "Ignore message and verify with the app directly",
+          "Forward the link to everyone you know",
+          "Reply with your password so they can check"
+        ],
+        answer: 1,
+        explanation: "Urgent messages are common phishing tricks. Pause, verify through official channels, and avoid rushing."
+      },
+      {
+        id: 10,
+        question: "Which sentence matches a giveaway scam warning?",
+        options: [
+          "A trusted school page posts a random win with rules and app login",
+          "A verified official page with a clear link and date",
+          "You have won a phone. Send full PIN to unlock your gift",
+          "A friend from your class gives you a known coupon code"
+        ],
+        answer: 2,
+        explanation: "Scammers often announce fake prizes to collect credentials or payments. Check the source before sharing data."
+      },
+      {
+        id: 11,
+        question: "Your home Wi-Fi password is 'mylovehome'. What should you change it to?",
+        options: [
+          "A longer passphrase with symbols and random words",
+          "Your family surname only",
+          "Pet name + birthday",
+          "1234house"
+        ],
+        answer: 0,
+        explanation: "A strong Wi-Fi passphrase blocks outsiders from joining your home network and eavesdropping traffic."
+      },
+      {
+        id: 12,
+        question: "You are in a new city and your phone offers \"Free Coffee Shop Wi-Fi\". Which is the safest approach?",
+        options: [
+          "Use it for all your banking because it is quick",
+          "Auto-join every open network",
+          "Turn off auto-join and only connect after you verify the network",
+          "Share your hotspot password with nearby tables"
+        ],
+        answer: 2,
+        explanation: "Unknown Wi-Fi can be fake or unsafe. Keep auto-join off and connect manually to trusted networks."
+      },
+      {
+        id: 13,
+        question: "You need a new puzzle game. What is the safest place to download it?",
+        options: [
+          "A random website link from social media",
+          "From a text message ad",
+          "From a classmate's random cloud folder",
+          "From the official app store or school-approved source"
+        ],
+        answer: 3,
+        explanation: "Only install from trusted stores. Unknown sources can include malware or spyware."
+      },
+      {
+        id: 14,
+        question: "An app asks for access to contacts, camera, and location at first setup. Best practice is to?",
+        options: [
+          "Allow all access to avoid app issues",
+          "Review carefully and deny what is not needed",
+          "Accept only camera and share location too",
+          "Deny everything forever"
+        ],
+        answer: 1,
+        explanation: "Apps should only get permissions they truly need. Limiting access protects your privacy and data."
+      },
+      {
+        id: 15,
+        question: "Which action is correct at a shared school computer?",
+        options: [
+          "Keep your session open for speed",
+          "Sign out, clear sessions, and close tabs before leaving",
+          "Change your screen to mute and walk away",
+          "Do not log in with a personal account"
+        ],
+        answer: 1,
+        explanation: "Shared devices can expose unread email, chats, and files if you leave sessions active."
+      },
+      {
+        id: 16,
+        question: "Lock screen is showing message previews from your chats. What should you do?",
+        options: [
+          "Keep as is because previews help you stay connected",
+          "Hide notification previews and protect lock screen",
+          "Post screen image to friends",
+          "Turn off lock screen completely"
+        ],
+        answer: 1,
+        explanation: "Previews can reveal sensitive conversations to anyone near your locked phone. Hide content on lock screen."
+      },
+      {
+        id: 17,
+        question: "Someone online sends mean threats and embarrassing comments. Your best first move is to:",
+        options: [
+          "Keep screenshots and tell a trusted adult",
+          "Ignore only and keep chatting",
+          "Share screenshots publicly immediately",
+          "Send your home address to clarify"
+        ],
+        answer: 0,
+        explanation: "Quickly capture evidence, block/report, and involve a trusted adult or authority so it does not continue."
+      },
+      {
+        id: 18,
+        question: "Why is regular backup of school files and photos important?",
+        options: [
+          "It makes accounts harder to guess",
+          "It helps you transfer to a new brand of tablet",
+          "It protects your work if your device is lost or hacked",
+          "It keeps your app installs synced"
+        ],
+        answer: 2,
+        explanation: "Backups ensure your important files survive lost devices, damage, or compromise."
+      },
+      {
+        id: 19,
+        question: "You receive a random message with a short link and a reward. What should you do if you feel unsure?",
+        options: [
+          "Click immediately to avoid missing out",
+          "Trust instantly if the sender has many followers",
+          "Pause and ask a trusted adult before acting",
+          "Reply with all your account details"
+        ],
+        answer: 2,
+        explanation: "A pause-and-verify mindset catches many scams and social tricks. Your instinct is a useful safety signal."
+      },
+      {
+        id: 20,
+        question: "Which is the strongest statement about online trust?",
+        options: [
+          "If someone has a professional profile, always trust them",
+          "If it feels rushed or suspicious, verify outside the app first",
+          "Trust every message that sounds polite",
+          "Never tell adults anything about digital problems"
+        ],
+        answer: 1,
+        explanation: "If it feels off, slow down, verify, and seek help. Trust comes from verification, not tone or popularity."
+      }
+    ];
+
+    const state = {
+      index: 0,
+      score: 0,
+      answers: Array(quizQuestions.length).fill(null),
+      locked: false
+    };
+
+    const questionTextEl = document.getElementById("questionText");
+    const optionsEl = document.getElementById("options");
+    const feedbackEl = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+    const scoreEl = document.getElementById("score");
+    const currentEl = document.getElementById("current");
+    const progressFillEl = document.getElementById("progressFill");
+    const resultsEl = document.getElementById("results");
+    const restartBtn = document.getElementById("restartBtn");
+
+    const BEST_KEY = "sensibleInteractionQuizBest8to17";
+
+    function updateProgress() {
+      const percent = Math.round((state.index / quizQuestions.length) * 100);
+      currentEl.textContent = String(state.index + 1);
+      progressFillEl.style.width = `${percent}%`;
+    }
+
+    function renderQuestion() {
+      const question = quizQuestions[state.index];
+
+      state.locked = false;
+      questionTextEl.textContent = question.question;
+      nextBtn.disabled = true;
+      feedbackEl.classList.remove("show");
+      feedbackEl.textContent = "";
+      resultsEl.classList.remove("show");
+      optionsEl.innerHTML = "";
+
+      question.options.forEach((option, idx) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "option";
+        button.textContent = option;
+        button.dataset.index = idx;
+
+        button.addEventListener("click", () => handleSelect(idx, question));
+        optionsEl.appendChild(button);
+      });
+
+      updateProgress();
+    }
+
+    function handleSelect(selectedIndex, question) {
+      if (state.locked) {
+        return;
+      }
+
+      state.locked = true;
+      const isCorrect = selectedIndex === question.answer;
+      state.answers[state.index] = selectedIndex;
+
+      if (isCorrect) {
+        state.score += 1;
+      }
+
+      scoreEl.textContent = state.score;
+
+      optionsEl.querySelectorAll("button").forEach((btn) => {
+        const idx = Number(btn.dataset.index);
+        btn.disabled = true;
+
+        if (idx === question.answer) {
+          btn.classList.add("correct");
+        }
+
+        if (idx === selectedIndex && !isCorrect) {
+          btn.classList.add("wrong");
+        }
+      });
+
+      feedbackEl.textContent = `${isCorrect ? "Correct. " : "Not quite. "}${question.explanation}`;
+      feedbackEl.classList.add("show");
+      nextBtn.disabled = false;
+
+      if (state.index === quizQuestions.length - 1) {
+        nextBtn.textContent = "See Results";
+      }
+    }
+
+    function renderResults() {
+      resultsEl.classList.add("show");
+      const percent = Math.round((state.score / quizQuestions.length) * 100);
+      const best = Number(localStorage.getItem(BEST_KEY) || 0);
+      const improved = state.score > best;
+
+      if (improved) {
+        localStorage.setItem(BEST_KEY, String(state.score));
+      }
+
+      resultsEl.innerHTML = `
+        <div class="score-line">You scored ${state.score} / ${quizQuestions.length} (${percent}%)</div>
+        <p class="best">${improved ? `New best score: ${state.score} / 20` : `Best score: ${Math.max(best, state.score)} / 20`}.</p>
+        <p>
+          ${state.score >= 18 ? "Excellent work — you have very strong cyber habits." :
+            state.score >= 14 ? "Great job. Keep using the 4-step pause routine." :
+            state.score >= 10 ? "Good start. Review the habits around scams and privacy next." :
+            "Important: review the guide habits and focus on suspicious links, verification codes, and privacy settings."}
+        </p>
+        <div class="summary" aria-label="Answer review"></div>
+      `;
+
+      const summaryEl = resultsEl.querySelector(".summary");
+      quizQuestions.forEach((question, idx) => {
+        const selected = state.answers[idx];
+        const correct = question.answer;
+
+        const item = document.createElement("div");
+        item.className = "review-item";
+
+        item.innerHTML = `
+          <h4>${question.id}. ${question.question}</h4>
+          <p>
+            <span class="${selected === correct ? "ok" : "nope"}">
+              ${selected === correct ? "Your choice was correct" : "Your choice was not correct"}
+            </span>.
+            Correct answer: ${question.options[correct]}.
+            <br />
+            ${question.explanation}
+          </p>
+        `;
+
+        summaryEl.appendChild(item);
+      });
+
+      nextBtn.disabled = true;
+    }
+
+    function handleNext() {
+      if (state.index < quizQuestions.length - 1) {
+        state.index += 1;
+        renderQuestion();
+        nextBtn.textContent = "Next Question";
+        return;
+      }
+
+      renderResults();
+    }
+
+    function restartQuiz() {
+      state.index = 0;
+      state.score = 0;
+      state.answers.fill(null);
+      state.locked = false;
+      scoreEl.textContent = "0";
+      nextBtn.textContent = "Next Question";
+      resultsEl.classList.remove("show");
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    nextBtn.addEventListener("click", handleNext);
+    restartBtn.addEventListener("click", restartQuiz);
+
+    renderQuestion();
+  </script>
+</body>
+</html>

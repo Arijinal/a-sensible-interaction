@@ -136,6 +136,38 @@
       line-height: 1.45;
     }
 
+    .hero-actions {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-actions a {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hero-actions a:first-child {
+      background: linear-gradient(145deg, #0b70ab, #0a9eb2);
+      color: #fefefe;
+      box-shadow: 0 8px 22px rgba(9, 39, 66, 0.22);
+    }
+
+    .hero-actions a:last-child {
+      border: 1px solid #b7d8ef;
+      color: #0c4f78;
+      background: #eaf4ff;
+    }
+
+    .hero-actions a:hover {
+      transform: translateY(-1px);
+    }
+
     .hero-side {
       background: linear-gradient(165deg, #00466f 0%, #006ea7 52%, #0a8eb7 100%);
       border-radius: 30px;
@@ -586,6 +618,10 @@
             Help girls make one smart security decision in under five seconds, so they feel confident,
             protected, and in control online.
           </p>
+        </div>
+        <div class="hero-actions">
+          <a href="cyber-habit-quiz.html">Take the 20 Question Test</a>
+          <a href="A-Sensible-Interaction-Cyber-Safety-Guide.pdf">Download the PDF Guide</a>
         </div>
       </article>
 
